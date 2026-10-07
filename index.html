@@ -37,7 +37,52 @@
             height: 60px;
         }
 
-        nav.navbar > .navbar-collapse > ul.navbar-nav {
+        .portfolio-nav-menu {
+            display: flex;
+            flex: 0 1 auto;
+        }
+
+        .portfolio-nav-toggle {
+            display: none;
+            width: 44px;
+            height: 40px;
+            align-items: center;
+            justify-content: center;
+            color: #f1ecec;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+        }
+
+        .portfolio-nav-toggle-icon,
+        .portfolio-nav-toggle-icon::before,
+        .portfolio-nav-toggle-icon::after {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background-color: currentColor;
+        }
+
+        .portfolio-nav-toggle-icon {
+            position: relative;
+        }
+
+        .portfolio-nav-toggle-icon::before,
+        .portfolio-nav-toggle-icon::after {
+            position: absolute;
+            left: 0;
+            content: "";
+        }
+
+        .portfolio-nav-toggle-icon::before {
+            top: -6px;
+        }
+
+        .portfolio-nav-toggle-icon::after {
+            top: 6px;
+        }
+
+        nav.navbar > .portfolio-nav-menu > ul.navbar-nav {
             display: flex;
             flex-direction: row;
             flex-wrap: nowrap;
@@ -163,7 +208,7 @@
             }
         }
 
-        @media (max-width: 767.98px) {
+        @media (max-width: 991.98px) {
             body {
                 padding-top: 84px;
             }
@@ -179,16 +224,29 @@
                 flex-shrink: 0;
             }
 
-            .navbar-toggler {
+            .portfolio-nav-toggle {
+                display: flex;
                 margin-left: auto;
-                padding: 0.25rem 0.5rem;
-                border-color: rgba(255, 255, 255, 0.5);
             }
 
-            nav.navbar > .navbar-collapse > ul.navbar-nav {
+            .portfolio-nav-menu {
+                display: none;
+                flex: 0 0 100%;
+                width: 100%;
+            }
+
+            .portfolio-nav-menu.is-open {
+                display: block;
+            }
+
+            nav.navbar > .portfolio-nav-menu > ul.navbar-nav {
                 flex-direction: column;
                 align-items: stretch;
                 padding: 0.5rem 0 0.25rem;
+            }
+
+            nav.navbar > .portfolio-nav-menu .nav-link {
+                text-align: right;
             }
 
             .navbar-brand-logo {
@@ -201,6 +259,12 @@
                 padding: 8px 12px;
             }
 
+            section[id] {
+                scroll-margin-top: 84px;
+            }
+        }
+
+        @media (max-width: 767.98px) {
             .hero {
                 padding: 3rem 1rem;
             }
@@ -213,10 +277,6 @@
             .skills {
                 padding: 2rem 1rem;
             }
-
-            section[id] {
-                scroll-margin-top: 84px;
-            }
         }
 
     </style>
@@ -228,11 +288,11 @@
         <a class="navbar-brand" href="#home" aria-label="Wayne's Portfolio home">
             <img class="navbar-brand-logo" src="assets/logo.png" alt="Wayne's Portfolio">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#portfolioNav"
-            aria-controls="portfolioNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+        <button class="portfolio-nav-toggle" type="button" aria-controls="portfolioNav" aria-expanded="false"
+            aria-label="Open navigation menu">
+            <span class="portfolio-nav-toggle-icon"></span>
         </button>
-        <div class="collapse navbar-collapse justify-content-end" id="portfolioNav">
+        <div class="portfolio-nav-menu" id="portfolioNav">
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
@@ -388,12 +448,34 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
     <script>
-        document.querySelectorAll('#portfolioNav .nav-link').forEach((link) => {
+        const navToggle = document.querySelector('.portfolio-nav-toggle');
+        const portfolioNav = document.getElementById('portfolioNav');
+        const mobileViewport = window.matchMedia('(max-width: 991.98px)');
+
+        const closePortfolioNav = () => {
+            portfolioNav.classList.remove('is-open');
+            navToggle.setAttribute('aria-expanded', 'false');
+            navToggle.setAttribute('aria-label', 'Open navigation menu');
+        };
+
+        navToggle.addEventListener('click', () => {
+            const isOpen = portfolioNav.classList.toggle('is-open');
+            navToggle.setAttribute('aria-expanded', String(isOpen));
+            navToggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+        });
+
+        portfolioNav.querySelectorAll('.nav-link').forEach((link) => {
             link.addEventListener('click', () => {
-                if (window.matchMedia('(max-width: 991.98px)').matches) {
-                    bootstrap.Collapse.getOrCreateInstance(document.getElementById('portfolioNav')).hide();
+                if (mobileViewport.matches) {
+                    closePortfolioNav();
                 }
             });
+        });
+
+        mobileViewport.addEventListener('change', (event) => {
+            if (!event.matches) {
+                closePortfolioNav();
+            }
         });
     </script>
 </body>
