@@ -178,6 +178,16 @@
             color: #555555;
         }
 
+        .activity-preview {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            margin: 1rem 0;
+            border: 1px solid #dddddd;
+            border-radius: 12px;
+            background-color: #ffffff;
+        }
+
         .activity-link {
             display: inline-block;
             margin-top: 0.5rem;
@@ -442,10 +452,14 @@
         <div class="row g-4">
             <div class="col-md-6 col-lg-4">
                 <article class="activity-card">
-                    <h3>Web Activity 1</h3>
-                    <p>Replace this with a short description of your activity.</p>
-                    <!-- Replace the href with this activity's published URL or local file path. -->
-                    <a class="activity-link" href="activities/activity-1/index.html">View Activity</a>
+                    <h3>Web Development Activity 1</h3>
+                    <p>Bento Style</p>
+                    <iframe class="activity-preview"
+                        src="https://waynesailat.github.io/web-devactivities/webdev%20act1/"
+                        title="Preview of Web Development Activity 1"
+                        loading="lazy"></iframe>
+                    <a class="activity-link" href="https://waynesailat.github.io/web-devactivities/webdev%20act1/"
+                        target="_blank" rel="noopener noreferrer">View Activity</a>
                 </article>
             </div>
         </div>
